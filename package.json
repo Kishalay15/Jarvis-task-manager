@@ -1,0 +1,12 @@
+{
+  "name": "kanbantm",
+  "version": "1.0.0",
+  "description": "a task manager with collaborative features",
+  "license": "ISC",
+  "author": "Kishalay, Anurag, Utkarsh",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
