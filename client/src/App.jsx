@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom"
 import Dashboard from './pages/Dashboard'
 import Tasks from './pages/Tasks'
 import Users from './pages/Users'
+import Layout from './components/Layout'
 
 function App() {
 
