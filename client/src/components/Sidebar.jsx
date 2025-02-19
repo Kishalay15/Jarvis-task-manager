@@ -3,6 +3,9 @@ import {
     LayoutDashboard,
     CheckSquare,
     Users,
+    CircleCheckBig,
+    SquareChartGantt,
+    ListTodo,
     Trash
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +30,21 @@ const linkData = [
         icon: <Users size={20} />,
     },
     {
+        label: "Completed",
+        link: "completed/completed",
+        icon: <CircleCheckBig size={20} />,
+    },
+    {
+        label: "In Progress",
+        link: "in-progress/in progress",
+        icon: <SquareChartGantt size={20} />,
+    },
+    {
+        label: "To Do",
+        link: "todo/todo",
+        icon: <ListTodo size={20} />,
+    },
+    {
         label: "Trash",
         link: "trashed",
         icon: <Trash size={20} />,
@@ -39,7 +57,7 @@ const Sidebar = () => {
     const location = useLocation();
     const path = location.pathname.split("/")[1];
 
-    const sidebarLinks = user?.isAdmin ? linkData : linkData.slice(0, 4);
+    const sidebarLinks = user?.isAdmin ? linkData : linkData.slice(0, 6);
 
     const closeSidebar = () => {
         dispatch(setSidebarOpen(false));

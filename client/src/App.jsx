@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom"
 import Dashboard from './pages/Dashboard'
 import Tasks from './pages/Tasks'
 import Users from './pages/Users'
-import Trash from './pages/Trash'
+import Trashed from './pages/Trash'
 import TaskContent from './pages/TaskContent'
 import { Toaster } from 'sonner'
 import { useState } from 'react'
@@ -50,7 +50,7 @@ function App() {
           <Route path='/in-progress/:status' element={<Tasks />} />
           <Route path='/todo/:status' element={<Tasks />} />
           <Route path='/task/:id' element={<TaskContent />} />
-          <Route path='/trashed' element={<Trash />} />
+          <Route path='/trashed' element={<Trashed />} />
 
           <Route path='/team' element={<Users />} />
 

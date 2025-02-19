@@ -1,53 +1,6 @@
 export const summary = {
-  totalTasks: 10,
+  totalTasks: 9,
   last10Task: [
-    {
-      _id: "65c5f12ab5204a81bde866a9",
-      title: "Test task",
-      date: "2024-02-09T00:00:00.000Z",
-      priority: "high",
-      stage: "todo",
-      assets: [
-        "https://firebasestorage.googleapis.com/v0/b/taskmanager-557d7.appspot.com/o/1707471138863original-a005132062ca5bafc505c4c74f0e1865.jpg?alt=media&token=55f909f2-7f05-42f3-af4f-dc7f87cdea1d",
-        "https://firebasestorage.googleapis.com/v0/b/taskmanager-557d7.appspot.com/o/1707471144712PsZch9E1_400x400.jpg?alt=media&token=7ce62c7e-c240-4032-83c6-bb6c9cdc0d4b",
-      ],
-      team: [
-        {
-          _id: "65c202d4aa62f32ffd1303cc",
-          name: "Codewave Asante",
-          title: "Administrator",
-          role: "Admin",
-          email: "admin@gmail.com",
-        },
-        {
-          _id: "65c30b96e639681a13def0b5",
-          name: "Jane Smith",
-          title: "Product Manager",
-          role: "Manager",
-          email: "jane.smith@example.com",
-        },
-        {
-          _id: "65c317360fd860f958baa08e",
-          name: "Alex Johnson",
-          title: "UX Designer",
-          role: "Designer",
-          email: "alex.johnson@example.com",
-        },
-      ],
-      isTrashed: false,
-      activities: [],
-      subTasks: [
-        {
-          title: "Task manager youtube tutorial",
-          date: "2024-02-09T00:00:00.000Z",
-          tag: "tutorial",
-          _id: "65c5f153b5204a81bde866c8",
-        },
-      ],
-      createdAt: "2024-02-09T09:32:26.574Z",
-      updatedAt: "2024-02-09T09:36:53.339Z",
-      __v: 1,
-    },
     {
       _id: "65c5d547660756f6fd453a7a",
       title: "Duplicate - Duplicate - Review Code Changes",
@@ -590,50 +543,6 @@ export const chartData = [
 ];
 
 export const tasks = [
-  {
-    _id: "65c5f12ab5204a81bde866a9",
-    title: "Test task",
-    date: "2024-02-09T00:00:00.000Z",
-    priority: "high",
-    stage: "todo",
-    assets: [
-      "https://firebasestorage.googleapis.com/v0/b/taskmanager-557d7.appspot.com/o/1707471138863original-a005132062ca5bafc505c4c74f0e1865.jpg?alt=media&token=55f909f2-7f05-42f3-af4f-dc7f87cdea1d",
-      "https://firebasestorage.googleapis.com/v0/b/taskmanager-557d7.appspot.com/o/1707471144712PsZch9E1_400x400.jpg?alt=media&token=7ce62c7e-c240-4032-83c6-bb6c9cdc0d4b",
-    ],
-    team: [
-      {
-        _id: "65c202d4aa62f32ffd1303cc",
-        name: "Codewave Asante",
-        title: "Administrator",
-        email: "admin@gmail.com",
-      },
-      {
-        _id: "65c30b96e639681a13def0b5",
-        name: "Jane Smith",
-        title: "Product Manager",
-        email: "jane.smith@example.com",
-      },
-      {
-        _id: "65c317360fd860f958baa08e",
-        name: "Alex Johnson",
-        title: "UX Designer",
-        email: "alex.johnson@example.com",
-      },
-    ],
-    isTrashed: false,
-    activities: [],
-    subTasks: [
-      {
-        title: "Task manager youtube tutorial",
-        date: "2024-02-09T00:00:00.000Z",
-        tag: "tutorial",
-        _id: "65c5f153b5204a81bde866c8",
-      },
-    ],
-    createdAt: "2024-02-09T09:32:26.574Z",
-    updatedAt: "2024-02-09T09:36:53.339Z",
-    __v: 1,
-  },
   {
     _id: "65c5d547660756f6fd453a7a",
     title: "Duplicate - Duplicate - Review Code Changes",
