@@ -7,10 +7,12 @@ import Trash from './pages/Trash'
 import TaskContent from './pages/TaskContent'
 import { Toaster } from 'sonner'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import Sidebar from './components/Sidebar'
+import Navbar from './components/Navbar'
 
 function Layout() {
-  const user = ""
-
+  const user = useSelector(state => state.auth)
   const location = useLocation()
 
   if (!user) {
@@ -18,16 +20,22 @@ function Layout() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="p-4">
-        <Outlet />
-      </main>
+    <div className='flex h-screen overflow-hidden'>
+      <div className='hidden md:block'>
+        <Sidebar />
+      </div>
+      <div className='flex-1 flex flex-col overflow-hidden'>
+        <Navbar />
+
+        <main className='flex-1 overflow-y-auto p-4 2xl:px-10'>
+          <Outlet />
+        </main>
+      </div>
     </div>
-  )
+  );
 }
 
 function App() {
-
   return (
     <>
       <Routes>
