@@ -4,6 +4,9 @@ import { User, Lock, LogOut } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getInitials } from "../utils";
+import { toast } from "sonner";
+import { useLogoutMutation } from "../redux/slices/api/authApiSlice";
+import { logout } from "../redux/slices/authSlice";
 
 const UserAvatar = () => {
     const [open, setOpen] = useState(false);
@@ -12,8 +15,16 @@ const UserAvatar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const logoutHandler = () => {
-        console.log("logout");
+    const [logoutUser] = useLogoutMutation()
+
+    const logoutHandler = async () => {
+        try {
+            await logoutUser().unwrap()
+            dispatch(logout())
+            navigate("/login")
+        } catch (error) {
+            toast.error("Something went wrong")
+        }
 
     };
 

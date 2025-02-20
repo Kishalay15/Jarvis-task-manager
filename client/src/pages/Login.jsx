@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff} from 'lucide-react';
 import { toast } from 'sonner';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "../redux/slices/api/authApiSlice"
+import { setCredentials } from "../redux/slices/authSlice";
+import Loader from "../components/Loader";
 
 const Login = () => {
     const { user } = useSelector(state => state.auth);
@@ -16,9 +19,23 @@ const Login = () => {
     } = useForm();
 
     const navigate = useNavigate();
+    const dispatch = useDispatch()
+
+    const [login, { isLoading }] = useLoginMutation()
 
     const submitHandler = async (data) => {
-        console.log("Submit");
+        try {
+            const result = await login(data).unwrap()
+
+            dispatch(setCredentials(result))
+            navigate("/")
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.data?.message || error.message)
+        }
     };
 
     useEffect(() => {
@@ -105,12 +122,12 @@ const Login = () => {
                             </button>
                         </div>
 
-                        <button
+                        {isLoading ? (<Loader />) : (<button
                             type="submit"
                             className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Sign in
-                        </button>
+                        </button>)}
                     </form>
                 </div>
             </div>
