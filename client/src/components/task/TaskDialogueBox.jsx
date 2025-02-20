@@ -1,10 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 import { Folder, MoreHorizontal, Copy, Plus, Edit, Trash2 } from "lucide-react";
 import AddTask from "./AddTask";
 import ConfirmatioDialog from "../Dialogs";
 import SubTask from "./SubTask";
+import { useDuplicationTaskMutation, useTrashTaskMutation } from "../../redux/slices/api/taskApiSlice";
+import { toast } from "sonner";
 
 const TaskDialogueBox = ({ task }) => {
     const [open, setOpen] = useState(false);
@@ -13,9 +15,45 @@ const TaskDialogueBox = ({ task }) => {
 
     const navigate = useNavigate();
 
-    const duplicateHandler = () => { };
-    const deleteClicks = () => { };
-    const deleteHandler = () => { };
+    const [deleteTask] = useTrashTaskMutation()
+    const [duplicateTask] = useDuplicationTaskMutation()
+
+    const duplicateHandler = async () => {
+        try {
+            const result = await duplicateTask(task._id).unwrap()
+
+            toast.success(result?.message)
+
+            setTimeout(() => {
+                setOpenDialog(false)
+                window.location.reload()
+            },500)
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.data?.message || error.error)
+        }
+    };
+    const deleteClicks = () => {
+        setOpenDialog(true)
+    };
+    const deleteHandler = async () => {
+        try {
+            const result = await deleteTask({
+                id: task._id,
+                isTrashed: "trash",
+            }).unwrap()
+
+            toast.success(result?.message)
+
+            setTimeout(() => {
+                setOpenDialog(false)
+                window.location.reload()
+            }, 500)
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.data?.message || error.error)
+        }
+    };
 
     const items = [
         {

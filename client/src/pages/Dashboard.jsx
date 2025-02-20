@@ -9,24 +9,36 @@ import { useSelector } from "react-redux";
 import { summary } from "../assets/data";
 import clsx from "clsx";
 import Chart from "../components/Chart";
+import { useGetDashboardStatsQuery } from "../redux/slices/api/taskApiSlice";
+import Loader from "../components/Loader";
 
 const Dashboard = () => {
-    const { user } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth)
+    const { data, isLoading } = useGetDashboardStatsQuery()
 
-    const userTasks = user?.role === "Admin" ? summary.last10Task : summary.last10Task.filter(task =>
-        Array.isArray(task.team) && task.team.some(member => member._id === user._id)
-    );
+    if (isLoading)
+        return (
+            <div className="py-10">
+                <Loader />
+            </div>
+        )
 
-    const totals = userTasks.reduce((acc, task) => {
-        acc[task.stage] = (acc[task.stage] || 0) + 1;
-        return acc;
-    }, {});
+    // const userTasks = user?.role === "Admin" ? summary.last10Task : summary.last10Task.filter(task =>
+    //     Array.isArray(task.team) && task.team.some(member => member._id === user._id)
+    // );
+
+    // const totals = userTasks.reduce((acc, task) => {
+    //     acc[task.stage] = (acc[task.stage] || 0) + 1;
+    //     return acc;
+    // }, {});
+
+    const totals = data?.tasks
 
     const stats = [
         {
             _id: "1",
             label: "TOTAL TASKS",
-            total: userTasks.length || 0,
+            total: data?.totalTasks || 0,
             icon: <ClipboardList size={20} />,
             bg: "bg-[#af7ac5]",
         },
@@ -76,7 +88,7 @@ const Dashboard = () => {
             </div>
             <div className='w-full bg-white my-16 p-4 rounded shadow-sm'>
                 <h4 className='text-xl text-gray-600 font-semibold'>Chart by Priority</h4>
-                <Chart />
+                <Chart data={data?.graphData} />
             </div>
         </div>
     );

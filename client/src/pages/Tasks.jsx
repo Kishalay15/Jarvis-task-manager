@@ -7,6 +7,7 @@ import TaskLabels from '../components/task/TaskLabels';
 import TaskCard from '../components/TaskCard'
 import { summary } from '../assets/data'
 import AddTask from "../components/task/AddTask";
+import { useGetAllTasksQuery } from '../redux/slices/api/taskApiSlice';
 
 const TASK_TYPE_BG = {
     todo: "bg-blue-50",
@@ -27,26 +28,32 @@ const TASK_TYPE_HOVER = {
 function Tasks() {
     const params = useParams()
     const [open, setOpen] = useState(false)
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
     const status = params?.status || "";
     const { user } = useSelector((state) => state.auth);
 
+    const { data, isLoading } = useGetAllTasksQuery({
+        strQuery: status,
+        isTrashed: "",
+        search: "",
+    })
+
     console.log("Current user:", user);
 
-    const userTasks = user?.role === "Admin" ? summary.last10Task : summary.last10Task.filter(task => {
-        if (!user) return false;
-        return Array.isArray(task.team) && task.team.some(member => member._id === user._id);
-    });
+    // const userTasks = user?.role === "Admin" ? summary.last10Task : summary.last10Task.filter(task => {
+    //     if (!user) return false;
+    //     return Array.isArray(task.team) && task.team.some(member => member._id === user._id);
+    // });
 
-    console.log("Filtered tasks count:", userTasks.length);
+    console.log("Filtered tasks count:", data?.tasks.length);
 
-    const todoTasks = userTasks.filter(task => task.stage === 'todo');
-    const inProgressTasks = userTasks.filter(task => task.stage === 'in progress');
-    const completedTasks = userTasks.filter(task => task.stage === 'completed');
+    const todoTasks = data?.tasks.filter(task => task.stage === 'todo');
+    const inProgressTasks = data?.tasks.filter(task => task.stage === 'in progress');
+    const completedTasks = data?.tasks.filter(task => task.stage === 'completed');
 
-    const filteredTasks = status ? userTasks.filter(task => task.stage === status.toLowerCase()) : null;
+    const filteredTasks = status ? data?.tasks.filter(task => task.stage === status.toLowerCase()) : null;
 
-    return loading ? (
+    return isLoading ? (
         <div className='py-10'>
             <Loader />
         </div>

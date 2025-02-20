@@ -6,33 +6,68 @@ import { useForm } from "react-hook-form";
 import UserList from "./UserList";
 import SelectList from "../SelectList";
 import { Images } from "lucide-react";
+import { toast } from "sonner";
+import { useCreateTaskMutation, useUpdateTaskMutation } from "../../redux/slices/api/taskApiSlice";
+import { dateFormatter } from "../../utils";
 
 const LISTS = ["TODO", "IN PROGRESS", "COMPLETED"];
 const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
 
-const uploadedFileURLs = [];
+// const uploadedFileURLs = [];
 
-const AddTask = ({ open, setOpen }) => {
-    const task = "";
+const AddTask = ({ open, setOpen, task }) => {
+
+    const defaultValues = {
+        title: task?.title || "",
+        date: dateFormatter(task?.date || new Date()),
+        team: [],
+        stage: "",
+        priority: "",
+        assets: [],
+    }
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+    } = useForm({ defaultValues });
     const [team, setTeam] = useState(task?.team || []);
     const [stage, setStage] = useState(task?.stage?.toUpperCase() || LISTS[0]);
     const [priority, setPriority] = useState(
         task?.priority?.toUpperCase() || PRIORIRY[2]
     );
-    const [assets, setAssets] = useState([]);
-    const [uploading, setUploading] = useState(false);
 
-    const submitHandler = () => { };
+    const [createTask, { isLoading }] = useCreateTaskMutation()
+    const [updateTask, { isLoading: isUpdating }] = useUpdateTaskMutation()
 
-    const handleSelect = (e) => {
-        setAssets(e.target.files);
+    const submitHandler = async (data) => {
+        try {
+            const newData = {
+                ...data,
+                team,
+                stage,
+                priority,
+            }
+
+            const result = task?._id
+                ? await updateTask({ ...newData, id: task?._id }).unwrap()
+                : await createTask(newData).unwrap()
+
+            toast.success(result.message)
+
+            setTimeout(() => {
+                setOpen(false)
+            }, 500)
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.data?.message || error?.error)
+        }
     };
+
+    // const handleSelect = (e) => {
+    //     setAssets(e.target.files);
+    // };
 
     return (
         <>
