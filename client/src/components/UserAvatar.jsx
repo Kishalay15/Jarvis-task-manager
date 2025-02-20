@@ -14,6 +14,7 @@ const UserAvatar = () => {
 
     const logoutHandler = () => {
         console.log("logout");
+
     };
 
     const userInitials = user?.name ? getInitials(user.name) : '';

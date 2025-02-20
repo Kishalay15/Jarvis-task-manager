@@ -24,7 +24,7 @@ const Navbar = () => {
                     </button>
                 </div>
 
-                {/* search */}
+                {/* search
                 <div className="flex-1 max-w-2xl mx-8">
                     <div className="relative">
                         <input
@@ -37,10 +37,10 @@ const Navbar = () => {
                             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                         />
                     </div>
-                </div>
+                </div> */}
 
                 <div className="flex items-center justify-end">
-                    <div className="w-9 h-9 rounded-full bg-[#10B981] flex items-center justify-center cursor-pointer hover:bg-[#0ea371] transition-colors">
+                    <div className="w-9 h-9 rounded-full bg-[#10B981] flex items-center justify-center cursor-pointer hover:bg-[#0ea371] transition-colors mr-10">
                         <span className="text-white font-medium text-lg">
                             <UserAvatar />
                         </span>
