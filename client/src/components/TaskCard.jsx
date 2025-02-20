@@ -44,7 +44,7 @@ const TaskCard = ({ task }) => {
                         <span className='uppercase'>{task?.priority}</span>
                     </div>
 
-                    {user?.isAdmin && <TaskDialogueBox task={task} />}
+                    <TaskDialogueBox task={task} />
                 </div>
 
                 <div className='flex items-center gap-2'>
@@ -106,7 +106,7 @@ const TaskCard = ({ task }) => {
                 <div className='w-full pb-2'>
                     <button
                         onClick={() => setOpen(true)}
-                        disabled={!user.isAdmin}
+                        disabled={!(user.role === "Admin")}
                         className='w-full flex gap-4 items-center text-sm text-gray-500 font-semibold disabled:cursor-not-allowed disabled:text-gray-300'
                     >
                         <Plus className='text-lg' />

@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { PRIORITY_STYLES, TASK_TYPE } from "../utils";
 import { ArchiveRestore, Trash } from 'lucide-react'
 import { tasks } from "../assets/data";
+import ConfirmatioDialog from '../components/Dialogs';
 
 const TASK_TYPE_TXT = {
     todo: "text-blue-600",
@@ -97,44 +98,55 @@ function Trashed() {
     );
 
     return (
-        <div className='w-full md:px-1 px-0 mb-6'>
-            <div className='flex items-center justify-between mb-8'>
-                <h2 className="text-2xl font-semibold capitalize">
-                    Trashed Tasks
-                </h2>
+        <>
+            <div className='w-full md:px-1 px-0 mb-6'>
+                <div className='flex items-center justify-between mb-8'>
+                    <h2 className="text-2xl font-semibold capitalize">
+                        Trashed Tasks
+                    </h2>
 
-                <div className='flex gap-2 md:gap-4 items-center'>
-                    <button
-                        type="button"
-                        className="flex flex-row-reverse gap-1 items-center  text-black text-sm md:text-base rounded-md 2xl:py-2.5 px-3 py-2 outline-none"
-                        onClick={() => restoreAllClick()}
-                    >
-                        <span>Restore All</span>
-                        <ArchiveRestore className='text-lg hidden md:flex' />
-                    </button>
-                    <button
-                        type="button"
-                        className="flex flex-row-reverse gap-1 items-center  text-red-600 text-sm md:text-base rounded-md 2xl:py-2.5 px-3 py-2 outline-none"
-                        onClick={() => deleteAllClick()}
-                    >
-                        <span>Delete All</span>
-                        <Trash className='text-lg hidden md:flex' />
-                    </button>
+                    <div className='flex gap-2 md:gap-4 items-center'>
+                        <button
+                            type="button"
+                            className="flex flex-row-reverse gap-1 items-center  text-black text-sm md:text-base rounded-md 2xl:py-2.5 px-3 py-2 outline-none"
+                            onClick={() => restoreAllClick()}
+                        >
+                            <span>Restore All</span>
+                            <ArchiveRestore className='text-lg hidden md:flex' />
+                        </button>
+                        <button
+                            type="button"
+                            className="flex flex-row-reverse gap-1 items-center  text-red-600 text-sm md:text-base rounded-md 2xl:py-2.5 px-3 py-2 outline-none"
+                            onClick={() => deleteAllClick()}
+                        >
+                            <span>Delete All</span>
+                            <Trash className='text-lg hidden md:flex' />
+                        </button>
+                    </div>
+                </div>
+                <div className='bg-white px-2 md:px-6 py-4 shadow-md rounded'>
+                    <div className='overflow-x-auto'>
+                        <table className='w-full mb-5'>
+                            <TableHeader />
+                            <tbody>
+                                {tasks?.map((tk, id) => (
+                                    <TableRow key={id} item={tk} />
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div className='bg-white px-2 md:px-6 py-4 shadow-md rounded'>
-                <div className='overflow-x-auto'>
-                    <table className='w-full mb-5'>
-                        <TableHeader />
-                        <tbody>
-                            {tasks?.map((tk, id) => (
-                                <TableRow key={id} item={tk} />
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+            <ConfirmatioDialog
+                open={openDialog}
+                setOpen={setOpenDialog}
+                msg={msg}
+                setMsg={setMsg}
+                type={type}
+                setType={setType}
+                onClick={() => { }}
+            />
+        </>
     )
 }
 

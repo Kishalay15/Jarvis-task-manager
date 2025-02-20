@@ -5,24 +5,34 @@ import {
     ListTodo,
     LayoutList
 } from "lucide-react";
+import { useSelector } from "react-redux";
 import { summary } from "../assets/data";
 import clsx from "clsx";
 import Chart from "../components/Chart";
 
 const Dashboard = () => {
-    const totals = summary.tasks;
+    const { user } = useSelector((state) => state.auth);
+
+    const userTasks = user?.role === "Admin" ? summary.last10Task : summary.last10Task.filter(task =>
+        Array.isArray(task.team) && task.team.some(member => member._id === user._id)
+    );
+
+    const totals = userTasks.reduce((acc, task) => {
+        acc[task.stage] = (acc[task.stage] || 0) + 1;
+        return acc;
+    }, {});
 
     const stats = [
         {
             _id: "1",
             label: "TOTAL TASKS",
-            total: summary?.totalTasks || 0,
+            total: userTasks.length || 0,
             icon: <ClipboardList size={20} />,
             bg: "bg-[#af7ac5]",
         },
         {
             _id: "2",
-            label: "COMPLETED TASKS", // Fixed Typo
+            label: "COMPLETED TASKS",
             total: totals["completed"] || 0,
             icon: <ClipboardCheck size={20} />,
             bg: "bg-[#0f766e]",
@@ -37,7 +47,7 @@ const Dashboard = () => {
         {
             _id: "4",
             label: "TODOS",
-            total: totals["todo"] || 0, // Added fallback
+            total: totals["todo"] || 0,
             icon: <LayoutList size={20} />,
             bg: "bg-[#1d4ed8]",
         },
@@ -49,7 +59,6 @@ const Dashboard = () => {
                 <div className='h-full flex flex-1 flex-col justify-between'>
                     <p className='text-base text-gray-600'>{label}</p>
                     <span className='text-2xl font-semibold'>{count}</span>
-                    {/* <span className='text-sm text-gray-400'>{"110 last month"}</span> */}
                 </div>
                 <div className={clsx("w-10 h-10 rounded-full flex items-center justify-center text-white", bg)}>
                     {icon}

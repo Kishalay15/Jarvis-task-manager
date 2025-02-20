@@ -3,6 +3,8 @@ import { Plus, Pencil, Trash } from 'lucide-react';
 import { summary } from "../assets/data";
 import { getInitials } from "../utils";
 import clsx from "clsx";
+import AddUser from '../components/AddUser';
+import ConfirmatioDialog, { UserAction } from "../components/Dialogs";
 
 function Users() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -86,33 +88,53 @@ function Users() {
     );
 
     return (
-        <div className='w-full md:px-1 px-0 mb-6'>
-            <div className='flex items-center justify-between mb-8'>
-                <h2 className="text-2xl font-semibold capitalize">
-                    Team Members
-                </h2>
-                <button
-                    type="button"
-                    className="flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md 2xl:py-2.5 px-3 py-2 outline-none"
-                    onClick={() => setOpen(true)}
-                >
-                    <span>Add New User</span>
-                    <Plus />
-                </button>
-            </div>
-            <div className='bg-white px-2 md:px-4 py-4 shadow-md rounded'>
-                <div className='overflow-x-auto'>
-                    <table className='w-full mb-5'>
-                        <TableHeader />
-                        <tbody>
-                            {summary.users?.map((user, index) => (
-                                <TableRow key={index} user={user} />
-                            ))}
-                        </tbody>
-                    </table>
+        <>
+            <div className='w-full md:px-1 px-0 mb-6'>
+                <div className='flex items-center justify-between mb-8'>
+                    <h2 className="text-2xl font-semibold capitalize">
+                        Team Members
+                    </h2>
+                    <button
+                        type="button"
+                        className="flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md 2xl:py-2.5 px-3 py-2 outline-none"
+                        onClick={() => setOpen(true)}
+                    >
+                        <span>Add New User</span>
+                        <Plus />
+                    </button>
+                </div>
+                <div className='bg-white px-2 md:px-4 py-4 shadow-md rounded'>
+                    <div className='overflow-x-auto'>
+                        <table className='w-full mb-5'>
+                            <TableHeader />
+                            <tbody>
+                                {summary.users?.map((user, index) => (
+                                    <TableRow key={index} user={user} />
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
+            <AddUser
+                open={open}
+                setOpen={setOpen}
+                userData={selected}
+                key={new Date().getTime().toString()}
+            />
+
+            <ConfirmatioDialog
+                open={openDialog}
+                setOpen={setOpenDialog}
+                onClick={deleteHandler}
+            />
+
+            <UserAction
+                open={openAction}
+                setOpen={setOpenAction}
+                onClick={userActionHandler}
+            />
+        </>
     )
 }
 

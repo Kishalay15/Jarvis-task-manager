@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import Loader from '../components/Loader'
 import { Plus } from 'lucide-react';
 import TaskLabels from '../components/task/TaskLabels';
 import TaskCard from '../components/TaskCard'
-import { tasks } from '../assets/data'
+import { summary } from '../assets/data'
 import AddTask from "../components/task/AddTask";
 
 const TASK_TYPE_BG = {
@@ -25,16 +26,25 @@ const TASK_TYPE_HOVER = {
 
 function Tasks() {
     const params = useParams()
-    const [selected, setSelected] = useState(0)
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const status = params?.status || "";
+    const { user } = useSelector((state) => state.auth);
 
-    const todoTasks = tasks.filter(task => task.stage === 'todo');
-    const inProgressTasks = tasks.filter(task => task.stage === 'in progress');
-    const completedTasks = tasks.filter(task => task.stage === 'completed');
+    console.log("Current user:", user);
 
-    const filteredTasks = status ? tasks.filter(task => task.stage === status.toLowerCase()) : null;
+    const userTasks = user?.role === "Admin" ? summary.last10Task : summary.last10Task.filter(task => {
+        if (!user) return false;
+        return Array.isArray(task.team) && task.team.some(member => member._id === user._id);
+    });
+
+    console.log("Filtered tasks count:", userTasks.length);
+
+    const todoTasks = userTasks.filter(task => task.stage === 'todo');
+    const inProgressTasks = userTasks.filter(task => task.stage === 'in progress');
+    const completedTasks = userTasks.filter(task => task.stage === 'completed');
+
+    const filteredTasks = status ? userTasks.filter(task => task.stage === status.toLowerCase()) : null;
 
     return loading ? (
         <div className='py-10'>
@@ -44,7 +54,7 @@ function Tasks() {
         <div className='w-full'>
             <div className='flex items-center justify-between mb-4'>
                 <h2 className="flex items-center justify-between mb-4 text-2xl font-semibold capitalize">
-                    {status ? `${status} Tasks` : "Tasks"}
+                    {status ? `${status} Tasks` : "My Tasks"}
                 </h2>
                 {!status && (
                     <button
@@ -60,39 +70,73 @@ function Tasks() {
             <div>
                 {!status && (
                     <div className='flex gap-8 mb-6'>
-                        <TaskLabels label={"To Do"} bgType={TASK_TYPE_BG.todo} textType={TASK_TYPE_TEXT.todo} hoverType={TASK_TYPE_HOVER.todo} />
-                        <TaskLabels label={"In Progress"} bgType={TASK_TYPE_BG['in progress']} textType={TASK_TYPE_TEXT['in progress']} hoverType={TASK_TYPE_HOVER['in progress']} />
-                        <TaskLabels label={"Completed"} bgType={TASK_TYPE_BG.completed} textType={TASK_TYPE_TEXT.completed} hoverType={TASK_TYPE_HOVER.completed} />
+                        <TaskLabels
+                            label={"To Do"}
+                            bgType={TASK_TYPE_BG.todo}
+                            textType={TASK_TYPE_TEXT.todo}
+                            hoverType={TASK_TYPE_HOVER.todo}
+                            count={todoTasks.length}
+                        />
+                        <TaskLabels
+                            label={"In Progress"}
+                            bgType={TASK_TYPE_BG['in progress']}
+                            textType={TASK_TYPE_TEXT['in progress']}
+                            hoverType={TASK_TYPE_HOVER['in progress']}
+                            count={inProgressTasks.length}
+                        />
+                        <TaskLabels
+                            label={"Completed"}
+                            bgType={TASK_TYPE_BG.completed}
+                            textType={TASK_TYPE_TEXT.completed}
+                            hoverType={TASK_TYPE_HOVER.completed}
+                            count={completedTasks.length}
+                        />
                     </div>
                 )}
 
                 {status ? (
                     <div className='space-y-4'>
-                        {filteredTasks.map((task, index) => (
-                            <TaskCard task={task} key={index} />
-                        ))}
+                        {filteredTasks && filteredTasks.length > 0 ? (
+                            filteredTasks.map((task, index) => (
+                                <TaskCard task={task} key={index} />
+                            ))
+                        ) : (
+                            <p className="text-gray-500">No {status.toLowerCase()} tasks found for you.</p>
+                        )}
                     </div>
                 ) : (
                     <div className='flex gap-9 2xl:gap-10'>
                         <div className='flex-1'>
                             <div className='space-y-4'>
-                                {todoTasks.map((task, index) => (
-                                    <TaskCard task={task} key={index} />
-                                ))}
+                                {todoTasks.length > 0 ? (
+                                    todoTasks.map((task, index) => (
+                                        <TaskCard task={task} key={index} />
+                                    ))
+                                ) : (
+                                    <p className="text-gray-500">No to-do tasks assigned to you.</p>
+                                )}
                             </div>
                         </div>
                         <div className='flex-1'>
                             <div className='space-y-4'>
-                                {inProgressTasks.map((task, index) => (
-                                    <TaskCard task={task} key={index} />
-                                ))}
+                                {inProgressTasks.length > 0 ? (
+                                    inProgressTasks.map((task, index) => (
+                                        <TaskCard task={task} key={index} />
+                                    ))
+                                ) : (
+                                    <p className="text-gray-500">No in-progress tasks assigned to you.</p>
+                                )}
                             </div>
                         </div>
                         <div className='flex-1'>
                             <div className='space-y-4'>
-                                {completedTasks.map((task, index) => (
-                                    <TaskCard task={task} key={index} />
-                                ))}
+                                {completedTasks.length > 0 ? (
+                                    completedTasks.map((task, index) => (
+                                        <TaskCard task={task} key={index} />
+                                    ))
+                                ) : (
+                                    <p className="text-gray-500">No completed tasks assigned to you.</p>
+                                )}
                             </div>
                         </div>
                     </div>
